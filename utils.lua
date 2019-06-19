@@ -24,4 +24,3 @@ function isPlayerTeam(...)
     end
     return false;
 end
-

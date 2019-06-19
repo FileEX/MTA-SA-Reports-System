@@ -1,5 +1,5 @@
 <meta>
-	<script src="cfg.lua" />
+	<script src="cfg.lua" type="shared" cache="false"/>
 	<script src="utils.lua" type="shared" cache="false" />
 	<script src="reports_class.lua" type="client" cache="false" />
 	<script src="reports_c.lua" type="client" cache="false" />

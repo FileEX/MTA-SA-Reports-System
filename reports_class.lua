@@ -10,81 +10,46 @@ local screenX, screenY = guiGetScreenSize();
 
 local constY = 5 / 800 * screenY;
 
-local screen = {guiGetScreenSize()};
-
-function sx( value )
-    local result = ( value / 1680 ) * screen[1]
-
-    return result
-end
-
-function sy( value )
-    local result = ( value / 1050 ) * screen[2]
-	
-    return result
-end
-
 local renderData = {
 	iconX = 385 / 800 * screenY,
 	iconY = 5 / 800 * screenY,
 	iconW = 40 / 800 * screenY,
 	iconH = 25 / 800 * screenY,
-	notifX = 38 / 800 * screenY,
+	notifX = 40 / 800 * screenY,
 	notifY = 20 / 800 * screenY,
 	notifW = 22 / 800 * screenY,
 	notifH = 22 / 800 * screenY,
 	notifS = 0.7 / 800 * screenY,
-	notifOX = 8 / 800 * screenY,
+	notifOX = 6 / 800 * screenY,
 	notifOY = 4 / 800 * screenY,
 
 	-- menu
-	menuX = sx(1242),
-	menuY = sy(239),
-	menuW = sx(428),
-	menuH = sy(480),
+	menuX = 350 / 800 * screenY,
+	menuY = (screenY / 2) - 330 / 800 * screenY,
+	menuW = 590 / 800 * screenY,
+	menuH = 590 / 800 * screenY,
 
-
-	itemX = sx(1248),
-	itemY = sy(306),
-	itemOY = sy(33),
-	itemW = sx(417),
-	itemH = sy(31),
-
-	textOskX = sx(1248),
-	textOskY = sy(282),
-	textOskW = sx(1331),
-	textOskH = sy(302),
-
-	textOsk2X = sx(1365),
-	textOsk2Y = sy(282),
-	textOsk2W = sx(1448),
-	textOsk2H = sy(302),
-
-	textPoX = sx(1534),
-	textPoY = sy(282),
-	textPoW = sx(1617),
-	textPoH = sy(302),
-
-	
+	itemX = 350 / 800 * screenY,
+	itemY = screenY / 2 - 320 / 800 * screenY,
+	itemOY = 40 / 800 * screenY,
+	itemH = 30 / 800 * screenY,
+	itemS = 1.3 / 800 * screenY,
 
 	textX = 600 / 800 * screenY,
 	textY = (screenY / 2) - 310 / 800 * screenY,
 	textS = 1.5 / 800 * screenY,
 
 	-- buttons
+	btnLX = 365 / 800 * screenY,
+	btnDX = 555 / 800 * screenY,
+	btnCX = 745 / 800 * screenY,
 
-	btnLX = sx(1255),
-	btnDX = sx(1397),
-	btnCX = sx(1539),
+	btnY = 570 / 800 * screenY,
+	btnW = 170 / 800 * screenY,
+	btnH = 56 / 800 * screenY,
 
-	btnY = sy(711),
-	btnW = sx(118),
-	btnH = sy(35),
-
-	renderTextX = sx(1266),
-	renderTextY = sy(298),
-	renderTextW = sx(1638),
-	renderTextH = sy(667),
+	readerTextX = 370 / 800 * screenY,
+	readerTextY = screenY / 2 - 230 / 800 * screenY,
 
 	lookTextS = 1.45 / 800 * screenY,
 
@@ -104,11 +69,7 @@ function reports:constructor()
 			icon = DxTexture('i/icon.png','argb',false,'clamp'),
 			notif = DxTexture('i/notif.png','argb',false,'clamp');
 		};
-		self.fonts = {
-			[1] = exports.rm_gui:fonts_getFont(12, 'regular'),
-			[2] = exports.rm_gui:fonts_getFont(10, 'regular'),
-		};
-		self.rows = 12;
+		self.rows = 10;
 		self.scroll = 0;
 		self.tick = 0;
 		self.selected = 0;
@@ -149,56 +110,34 @@ function reports:drawInterface()
 
 	if self.panelOpened then
 		-- bg
-		exports.rm_gui:dxCreateWindow(renderData.menuX, renderData.menuY, renderData.menuW, renderData.menuH, 'Raporty na graczy', 'left');
-		
-        dxDrawText("Oskarżający", renderData.textOskX, renderData.textOskY, renderData.textOskW, renderData.textOskH, 0xFFD4D4D4, 1.00, self.fonts[1], 'center', 'center');
-        dxDrawText("Oskarżony", renderData.textOsk2X, renderData.textOsk2Y, renderData.textOsk2W, renderData.textOsk2H, 0xFFD4D4D4, 1.00, self.fonts[1], 'center', 'center');
-        dxDrawText("Powód", renderData.textPoX, renderData.textPoY, renderData.textPoW, renderData.textPoH, 0xFFD4D4D4, 1.00, self.fonts[1], 'center', 'center');
-		
-		if isMouseInPosition(renderData.btnLX, renderData.btnY, renderData.btnW, renderData.btnH) then
-			dxDrawRectangle(renderData.btnLX, renderData.btnY, renderData.btnW, renderData.btnH, 0xFF464646, false);
-		else
-			dxDrawRectangle(renderData.btnLX, renderData.btnY, renderData.btnW, renderData.btnH, 0xFF404040, false);
-		end
-
-		if isMouseInPosition(renderData.btnDX, renderData.btnY, renderData.btnW, renderData.btnH) then
-			dxDrawRectangle(renderData.btnDX, renderData.btnY, renderData.btnW, renderData.btnH, 0xFF464646, false);
-		else
-			dxDrawRectangle(renderData.btnDX, renderData.btnY, renderData.btnW, renderData.btnH, 0xFF404040, false);
-		end
-
-		if isMouseInPosition(renderData.btnCX, renderData.btnY, renderData.btnW, renderData.btnH) then
-			dxDrawRectangle(renderData.btnCX, renderData.btnY, renderData.btnW, renderData.btnH, 0xFF464646, false);
-		else
-			dxDrawRectangle(renderData.btnCX, renderData.btnY, renderData.btnW, renderData.btnH, 0xFF404040, false);
-		end
-
-		dxDrawText('Zobacz', renderData.btnLX, renderData.btnY, renderData.btnLX + renderData.btnW, renderData.btnY + renderData.btnH, 0xFFD4D4D4, 1, self.fonts[1], 'center', 'center');
-		dxDrawText('Usuń', renderData.btnDX, renderData.btnY, renderData.btnDX + renderData.btnW, renderData.btnY + renderData.btnH, 0xFFD4D4D4, 1, self.fonts[1], 'center', 'center');
-		dxDrawText('Zamknij', renderData.btnCX, renderData.btnY, renderData.btnCX + renderData.btnW, renderData.btnY + renderData.btnH, 0xFFD4D4D4, 1, self.fonts[1], 'center', 'center');
+		dxDrawRectangle(renderData.menuX, renderData.menuY, renderData.menuW, renderData.menuH, 0xFF232323, false);
+		dxDrawText('RAPORTY', renderData.textX, renderData.textY, 100, 100, 0xFFFFFFFF, renderData.textS, 'default');
+		dxDrawRectangle(renderData.btnLX, renderData.btnY, renderData.btnW, renderData.btnH, 0xFF9736E2, false);
+		dxDrawText('Zobacz', renderData.btnLX, renderData.btnY, renderData.btnLX + renderData.btnW, renderData.btnY + renderData.btnH, 0xFFFFFFFF, renderData.btnTextS, 'default', 'center', 'center');
+		dxDrawRectangle(renderData.btnDX, renderData.btnY, renderData.btnW, renderData.btnH, 0xFF9736E2, false);
+		dxDrawText('Usuń', renderData.btnDX, renderData.btnY, renderData.btnDX + renderData.btnW, renderData.btnY + renderData.btnH, 0xFFFFFFFF, renderData.btnTextS, 'default', 'center', 'center');
+		dxDrawRectangle(renderData.btnCX, renderData.btnY, renderData.btnW, renderData.btnH, 0xFF9736E2, false);
+		dxDrawText('Zamknij', renderData.btnCX, renderData.btnY, renderData.btnCX + renderData.btnW, renderData.btnY + renderData.btnH, 0xFFFFFFFF, renderData.btnTextS, 'default', 'center', 'center');
 
 		for i = self.scroll + 1,self.scroll + self.rows do
 			if self.reportsTable[i] then
-				dxDrawRectangle(renderData.itemX, renderData.itemY - (28 - (i - self.scroll) * renderData.itemOY), renderData.itemW, renderData.itemH, (not isMouseInPosition(renderData.itemX, renderData.itemY - (28 - (i - self.scroll) * renderData.itemOY), renderData.itemW, renderData.itemH) and (not self.reportsTable[i].selected and 0xFF373737 or 0xFF404040) or 0xFF404040), false);
-				
-				dxDrawText(self.reportsTable[i].a, renderData.itemX + renderData.us + 5 / 800 * screenY, renderData.itemY - (24 - (i - self.scroll) * renderData.itemOY) + renderData.us, renderData.menuW, renderData.itemH, 0xFFFFFFFF, renderData.itemS, self.fonts[2]);
-				dxDrawText(self.reportsTable[i].b, renderData.itemX + 98 / 800 * screenY, renderData.itemY - (24 - (i - self.scroll) * renderData.itemOY) + renderData.us, renderData.menuW, renderData.itemH, 0xFFFFFFFF, renderData.itemS, self.fonts[2]);
-				dxDrawText(self.reportsTable[i].rsD, renderData.itemX + 220 / 800 * screenY, renderData.itemY - (24 - (i - self.scroll) * renderData.itemOY) + renderData.us, renderData.menuW, renderData.itemH, 0xFFFFFFFF, renderData.itemS, self.fonts[2]);
+				dxDrawRectangle(renderData.itemX, renderData.itemY - (-10 - (i - self.scroll) * renderData.itemOY), renderData.menuW, renderData.itemH, (not isMouseInPosition(renderData.itemX, renderData.itemY - (-10 - (i - self.scroll) * renderData.itemOY), renderData.menuW, renderData.itemH) and (not self.reportsTable[i].selected and 0xFF1E1E1E or 0xFF5E5E5E) or 0xFF5E5E5E), false);
+				dxDrawText(self.reportsTable[i].a, renderData.itemX + renderData.us, renderData.itemY - (-10 - (i - self.scroll) * renderData.itemOY) + renderData.us, renderData.menuW, renderData.itemH, 0xFFFFFFFF, renderData.itemS, 'default-bold');
+				dxDrawText(self.reportsTable[i].b, renderData.itemX + 150 / 800 * screenY, renderData.itemY - (-10 - (i - self.scroll) * renderData.itemOY) + renderData.us, renderData.menuW, renderData.itemH, 0xFFFFFFFF, renderData.itemS, 'default-bold');
+				dxDrawText(self.reportsTable[i].rsD, renderData.itemX + 350 / 800 * screenY, renderData.itemY - (-10 - (i - self.scroll) * renderData.itemOY) + renderData.us, renderData.menuW, renderData.itemH, 0xFFFFFFFF, renderData.itemS, 'default-bold');
 			end
 		end
 	end
 
 	if self.reader then
 		-- bg
-		exports.rm_gui:dxCreateWindow(renderData.menuX, renderData.menuY, renderData.menuW, renderData.menuH, 'Raport: '..self.selected, 'left')
-		dxDrawText('Zgłaszający: '..self.reportsTable[self.selected].a..'\n\nOskarżony: '..self.reportsTable[self.selected].b..'\n\nData: '..self.reportsTable[self.selected].time..'\n\nTreść: '..self.reportsTable[self.selected].rs, renderData.renderTextX, renderData.renderTextY, renderData.renderTextW, renderData.renderTextH, 0xFFD4D4D4, 1.00, self.fonts[1], "center", "top")
+		dxDrawRectangle(renderData.menuX, renderData.menuY, renderData.menuW, renderData.menuH, 0xFF232323, false);
+		dxDrawText('RAPORT '..self.selected, renderData.textX, renderData.textY, 100, 100, 0xFFFFFFFF, renderData.textS, 'default');
 
-		if isMouseInPosition(renderData.btnDX, renderData.btnY, renderData.btnW, renderData.btnH) then
-			dxDrawRectangle(renderData.btnDX, renderData.btnY, renderData.btnW, renderData.btnH, 0xFF464646, false);
-		else
-			dxDrawRectangle(renderData.btnDX, renderData.btnY, renderData.btnW, renderData.btnH, 0xFF404040, false);
-		end
-		dxDrawText('Wstecz', renderData.btnDX, renderData.btnY, renderData.btnDX + renderData.btnW, renderData.btnY + renderData.btnH, 0xFFD4D4D4, 1, self.fonts[1], 'center', 'center');
+		dxDrawText('Zgłaszający: '..self.reportsTable[self.selected].a..'\n\nOskarżony: '..self.reportsTable[self.selected].b..'\n\nData: '..self.reportsTable[self.selected].time..'\n\nTreść: '..self.reportsTable[self.selected].rs, renderData.readerTextX, renderData.readerTextY, renderData.readerTextX + renderData.menuW - (renderData.us * 12), renderData.readerTextY + renderData.menuH, 0xFFFFFFFF, renderData.lookTextS, 'default-bold', 'left', 'top', false, true);
+
+		dxDrawRectangle(renderData.btnDX, renderData.btnY, renderData.btnW, renderData.btnH, 0xFF9736E2, false);
+		dxDrawText('Wstecz', renderData.btnDX, renderData.btnY, renderData.btnDX + renderData.btnW, renderData.btnY + renderData.btnH, 0xFFFFFFFF, renderData.btnTextS, 'default', 'center', 'center');
 	end
 
 	-- small anti bug
@@ -249,7 +188,7 @@ function reports:onClick(btn,state)
 						self.reportsTable[i].selected = false;
 						self.selected = 0;
 					end
-					if isMouseInPosition(renderData.itemX, renderData.itemY - (28 - (i - self.scroll) * renderData.itemOY), renderData.menuW, renderData.itemH) then
+					if isMouseInPosition(renderData.itemX, renderData.itemY - (-10 - (i - self.scroll) * renderData.itemOY), renderData.menuW, renderData.itemH) then
 						self.reportsTable[i].selected = not self.reportsTable[i].selected;
 						self.selected = i;
 						break;
@@ -276,7 +215,7 @@ function reports:onScroll(k)
 end
 
 function reports:newReport(plr, target, reason, tm)
-	table.insert(self.reportsTable, {i = #self.reportsTable + 1, a = plr.name, b = target.name, rs = reason, rsD = reason:sub(1,25)..'...', selected = false, time = tm});
+	table.insert(self.reportsTable, {i = #self.reportsTable + 1, a = plr.name, b = target, rs = reason, rsD = reason:sub(1,25)..'...', selected = false, time = tm});
 		
 	if (isElement(self.bgS)) then
 		self.bgS:destroy();
@@ -296,7 +235,7 @@ function reports:removeRaport(i)
 		self.tick = getTickCount();
 	end
 
-	exports.rm_noti:createAlert('info', 'Zgłoszenie zostało usunięte.');
+	outputChatBox('Usunięto zgłoszenie.');
 end
 
 addEvent('syncTableClient', true);

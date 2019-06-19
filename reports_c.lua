@@ -21,3 +21,5 @@ function setReportsVisible(b)
 		end
 	end
 end
+
+setReportsVisible(true);

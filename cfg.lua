@@ -3,9 +3,7 @@
 	For: Royal-MTA
 ]]
 
-rankLevel = 'a:level'; -- admin / mod / support elementdata
-
-levels = {1,2,3,4}; -- levels mod, admin etc
+rankLevel = 'level'; -- admin / mod / support elementdata
 
 commands = { -- allowed commands
 	'report',
